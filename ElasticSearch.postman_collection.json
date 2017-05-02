@@ -1,0 +1,363 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ElasticSearch",
+		"_postman_id": "13da0166-bdb1-09b1-b2c0-61685a602c80",
+		"description": "ElasticSearch Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1 Init",
+			"description": "",
+			"item": [
+				{
+					"name": "Hello Elastic",
+					"request": {
+						"url": "localhost:9200",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check Indices",
+					"request": {
+						"url": "localhost:9200/_cat/indices",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": "health status index    pri rep docs.count docs.deleted store.size pri.store.size"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2 Create Index",
+			"description": "Creates an Index",
+			"item": [
+				{
+					"name": "Create Index",
+					"request": {
+						"url": "localhost:9200/sampleindex",
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": "Creates Index named sample"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3 Create Document",
+			"description": "Creates Type named sampleType with document id",
+			"item": [
+				{
+					"name": "Put: Index Document",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType/43",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"greetings\" : \"Hello InnRoadies!\"\n}"
+						},
+						"description": "Put: Creates Document\n\nPut is idempotent"
+					},
+					"response": []
+				},
+				{
+					"name": "Post: Index Document",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"guestname\": \"Mr.J\",\r\n  \"arrivaldate\":  \"2016/12/12\",\r\n  \"departuredate\":  \"2016/12/14\"\r\n}\r\n"
+						},
+						"description": "Post: Creates document"
+					},
+					"response": []
+				},
+				{
+					"name": "Search sampleType",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType/_search",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"greetings\" : \"Hello InnRoadies!\"\n}"
+						},
+						"description": "Search sampleType"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4 Basic Query DSL",
+			"description": "Basic Query Domain Specific Language",
+			"item": [
+				{
+					"name": "Basic Search Index Level",
+					"request": {
+						"url": "localhost:9200/sampleindex/_search",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"greetings\" : \"Hello InnRoadies!\"\n}"
+						},
+						"description": "Basic Search Index Level"
+					},
+					"response": []
+				},
+				{
+					"name": "Basic Search Type Level",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType/_search",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"greetings\" : \"Hello InnRoadies!\"\n}"
+						},
+						"description": "Basic Search Type Level"
+					},
+					"response": []
+				},
+				{
+					"name": "Basic Search Field Level",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType/_search?q=greetings='InnRoadies!'",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"greetings\" : \"Hello InnRoadies!\"\n}"
+						},
+						"description": "Basic Search Field Level"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5 Advanced Query DSL",
+			"description": "Advanced Query Domain Specific Language",
+			"item": [
+				{
+					"name": "1 Index data",
+					"request": {
+						"url": "localhost:9200/inbox/email/1",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Our company's Monthly News letter!\",\r\n  \"tag\": [\r\n    \"opportunity\"\r\n  ],\r\n  \"date\": \"2016-12-31\"\r\n}"
+						},
+						"description": "Index sample seed data"
+					},
+					"response": []
+				},
+				{
+					"name": "2 Index data",
+					"request": {
+						"url": "localhost:9200/inbox/email/2",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Our company's Monthly News letter!\",\r\n  \"tag\": [\r\n    \"spam\"\r\n  ],\r\n  \"date\": \"2016-12-31\"\r\n}"
+						},
+						"description": "Index sample seed data"
+					},
+					"response": []
+				},
+				{
+					"name": "3 Index data",
+					"request": {
+						"url": "localhost:9200/inbox/email/3",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Our company's Monthly News letter!\",\r\n  \"tag\": [\r\n    \"opportunity\",\r\n    \"starred\"\r\n  ],\r\n  \"date\": \"2015-12-31\"\r\n}"
+						},
+						"description": "Index sample seed data"
+					},
+					"response": []
+				},
+				{
+					"name": "1 Advanced Query DSL",
+					"request": {
+						"url": "localhost:9200/inbox/email/_search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": {\r\n    \"bool\": {\r\n      \"must\": {\r\n        \"match\": {\r\n          \"title\": \"Our company's Monthly News letter\"\r\n        }\r\n      },\r\n      \"must_not\": {\r\n        \"match\": {\r\n          \"tag\": \"spam\"\r\n        }\r\n      },\r\n      \"should\": [\r\n        {\r\n          \"match\": {\r\n            \"tag\": \"starred\"\r\n          }\r\n        },\r\n        {\r\n          \"range\": {\r\n            \"date\": {\r\n              \"gte\": \"2016-01-01\"\r\n            }\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}"
+						},
+						"description": "\r\n# Match \"Our company's Monthly News letter\" in the `title`\r\n\r\n# and `tag` must not include \"spam\"\r\n\r\n# and either `tag` should include \"starred\" or `date` must be >= \"2016-01-01\""
+					},
+					"response": []
+				},
+				{
+					"name": "2 Advanced Query DSL",
+					"request": {
+						"url": "localhost:9200/inbox/email/_search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": {\r\n    \"bool\": {\r\n      \"must\": {\r\n        \"match\": {\r\n          \"title\": \"Our company's Monthly News letter\"\r\n        }\r\n      },\r\n      \"must_not\": {\r\n        \"match\": {\r\n          \"tag\": \"spam\"\r\n        }\r\n      },\r\n      \"should\": [\r\n        {\r\n          \"match\": {\r\n            \"tag\": \"starred\"\r\n          }\r\n        }\r\n      ],\r\n      \"filter\": {\r\n        \"range\": {\r\n          \"date\": {\r\n            \"gte\": \"2016-01-01\"\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n}"
+						},
+						"description": "\r\n# Match \"Our company's Monthly News letter\" in the `title`\r\n\r\n# and `tag` must not include \"spam\"\r\n\r\n# and either `tag` should include \"starred\" AND `date` must be >= \"2016-01-01\""
+					},
+					"response": []
+				},
+				{
+					"name": "3 Advanced Query DSL",
+					"request": {
+						"url": "localhost:9200/inbox/email/_search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": {\r\n    \"constant_score\":   {\r\n      \"filter\": {\r\n          \"term\": { \"tag\": \"spam\" }\r\n      }\r\n    }\r\n  }\r\n}"
+						},
+						"description": "# Exaclty Match Emails that are spam"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6 Delete Document",
+			"description": "Deletes a Document",
+			"item": [
+				{
+					"name": "Delete Document",
+					"request": {
+						"url": "localhost:9200/sampleindex/sampleType/43",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": "Deletes Index named sample"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "9 Delete Index copy",
+			"description": "Deletes an Index",
+			"item": [
+				{
+					"name": "Delete Index",
+					"request": {
+						"url": "localhost:9200/sampleindex",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": "Deletes Index named sample"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

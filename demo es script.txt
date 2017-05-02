@@ -1,0 +1,117 @@
+# Delete the `inbox` index
+DELETE /inbox
+
+# Insert some example docs
+PUT /inbox/email/1
+{
+  "title": "Our company's Monthly News letter!",
+  "tag": [
+    "opportunity"
+  ],
+  "date": "2016-12-31"
+}
+
+PUT /inbox/email/2
+{
+  "title": "Our company's Monthly News letter!",
+  "tag": [
+    "spam"
+  ],
+  "date": "2016-12-31"
+}
+
+PUT /inbox/email/3
+{
+  "title": "Our company's Monthly News letter!",
+  "tag": [
+    "opportunity",
+    "starred"
+  ],
+  "date": "2015-12-31"
+}
+
+
+# Match "Our company's Monthly News letter" in the `title`
+# and `tag` must not include "spam"
+# and either `tag` should include "starred"
+# or `date` must be >= "2016-01-01"
+GET /inbox/email/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match": {
+          "title": "Our company's Monthly News letter"
+        }
+      },
+      "must_not": {
+        "match": {
+          "tag": "spam"
+        }
+      },
+      "should": [
+        {
+          "match": {
+            "tag": "starred"
+          }
+        },
+        {
+          "range": {
+            "date": {
+              "gte": "2016-01-01"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+# Move the date range query into the filter clause
+# to turn it into a non-scoring query
+GET /inbox/email/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match": {
+          "title": "Our company's Monthly News letter"
+        }
+      },
+      "must_not": {
+        "match": {
+          "tag": "spam"
+        }
+      },
+      "should": [
+        {
+          "match": {
+            "tag": "starred"
+          }
+        }
+      ],
+      "filter": {
+        "range": {
+          "date": {
+            "gte": "2016-01-01"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+# If you just want to apply a filter and nothing else, you can use
+# constant_score query
+GET /inbox/email/_search
+{
+  "query": {
+    "constant_score":   {
+      "filter": {
+          "term": { "tag": "spam" }
+      }
+    }
+  }
+}
